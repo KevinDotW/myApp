@@ -1,0 +1,24 @@
+@font-face
+{
+    font-family: "赵九江钢笔楷书";
+    src:url('../fonts/书体坊赵九江钢笔楷书.ttf')format('truetype');
+}
+
+@font-face
+{
+    font-family: "伯乐小清新";
+    src:url('../fonts/伯乐小清新.ttf')format('truetype');
+}
+
+@font-face
+{
+    font-family: "BanksScript";
+    src:url('../fonts/BanksScript.otf')format('opentype');
+}
+
+@font-face
+{
+    font-family: "sf-pro-text";
+    src:url('../fonts/sf-pro-text.ttf')format('truetype');
+}
+
