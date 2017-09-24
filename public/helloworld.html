@@ -1,1 +1,42 @@
-﻿
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Hello,World!</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="stylesheets/style.css" rel="stylesheet">
+        <link href="stylesheets/fonts.css" rel="stylesheet">
+        <script type="text/javascript" src="javascripts/functions.js"></script>
+    </head>
+    <body>
+        <div class="bg">
+            <div class="bg-left">
+            <p>请输入文本内容</p>
+            <input type="text" name="t1" value="Hello,World!">
+            <p>请输入大小</p>
+            <input type="text" name="t2" value="80">
+            <p>请输入颜色</p>
+            <input type="text" name="t3" value="black">
+            <p>请选择字体</p>
+            <select name="font">
+            <option>sf-pro-text</option>
+            <option>赵九江钢笔楷书</option>
+            <option>伯乐小清新</option>
+            <option>等线</option>
+            <option>楷体</option>
+            <option>黑体</option>
+            <option>宋体</option>
+            <option>BanksScript</option>
+            </select>
+            <p></p>
+            <input type="button" value="确定" onclick="setfont()">
+            </div>
+
+            <div class="bg-right">
+                <p id="msg">
+                    Hello,World!
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

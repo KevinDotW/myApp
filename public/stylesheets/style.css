@@ -1,12 +1,78 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+html
+{
+  height: 100%;
 }
 
-a {
-  color: #00B7FF;
+body
+{
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(179, 168, 150,0.5);
 }
 
-p{
-  color: #00B7FF;
+.bg
+{ 
+  position: relative;
+  width: 80%;
+  height: 80%;
+  background: rgba(249, 205, 173,0.8);
+  margin: 0 auto;
+  top: 8%;
+}
+
+.bg-left
+{
+  position: relative;
+  height: 100%;
+  width:25%;
+  float:left;
+}
+
+.bg-right
+{
+  position: relative;
+  height: 100%;
+  width:75%;
+  float:right;
+}
+
+.bg-left p
+{ 
+  position: relative;
+  font-family: "赵九江钢笔楷书";
+  font-size: 26px;
+  top:30px;
+}
+
+.bg-left input
+{ 
+  position: relative;
+  font-size: 20px;
+  top:10px;
+}
+
+.bg-left select
+{ 
+  position: relative;
+  font-size: 20px;
+  top:10px;
+}
+
+.bg-right p
+{ 
+  position: relative;
+  width: 100%;
+  text-align: center;
+  top:15%;
+  font-size: 80px;
+}
+
+#canv
+{
+  position: relative;
+  border: 3px solid black;
+  margin:auto;
+  top:8%;
+  cursor: pointer;
 }
