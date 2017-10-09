@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>vaultingHorse!</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="stylesheets/fonts.css" rel="stylesheet">
+        <script type="text/javascript" src="javascripts/functions.js"></script>
+        <script type="text/javascript" src="javascripts/jquery.js"></script>
+        <style>
+            body
+            {
+                margin: 0;
+                height: 100%;
+                width: 100%;
+                background: rgba(179, 168, 150,0.5);
+            }
+            .board-left
+            {
+                position: relative;
+                width:35%;
+                height: 100%;
+                display: inline-block;
+                vertical-align: top;
+            }
+            .board-right
+            {   
+                left:10%;
+                position: relative;
+                width: 60%;
+                height: 100%;
+                display: inline-block;
+            
+            }
+            #canv
+            {
+                position: relative;
+                border: 2px solid black;
+                margin:auto;
+                cursor: pointer;
+            }
+
+        </style>
+    </head>
+    <body>
+        
+
+        <div class="board-left">
+            <table border="2">
+                <tr>
+                    <th>棋盘行数m</th>
+                    <th>棋盘列数n</th>
+                    <th>初始位置X(从0开始)</th>
+                    <th>初始位置Y(从0开始)</th>
+                </tr>
+                <tr>
+                    <td><input type="number" max="7" min="2" id="inputm" value="3"></td>
+                    <td><input type="number" max="8" min="2" id="inputn" value="3"></td>
+                    <td><input type="number" max="2" min="0" id="inputx" value="0"></td>
+                    <td><input type="number" max="2" min="0" id="inputy" value="0"></td>
+                </tr>
+                <tr>
+                    <th colspan="4"><button type="submit" onclick="toResult()">计算</button></th>
+                </tr>
+                <tr>
+                    <th colspan="4"><p>计算结果(点击方案的红色部分,路线可视化)</p></th>
+                </tr>
+                <tr>
+                    <th colspan="4"><p>更新棋盘/查看其他方案需要重新刷新页面</p></th>
+                </tr>
+                <tr>
+                    <th colspan="4">
+                        <ul id="result">
+                            
+                        </ul>
+                    </th>
+                </tr>
+            </table>
+        </div>
+
+        <div class="board-right">
+
+            <canvas id="canv" width="640px" height="560px" onload="board_draw()"></canvas>
+
+        </div>
+    </body>
+</html>
