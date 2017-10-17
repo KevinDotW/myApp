@@ -194,7 +194,7 @@ function toResult()
         }
         document.getElementById("result").innerHTML+="("+routes[0][0].x+","+routes[0][0].y+")<br>"
     }
-
+    
     $(document).ready(function(){
         $("#result li").click(function(){
              a=Number($(this).attr("id"));
@@ -218,6 +218,7 @@ function toResult()
                 cxt.stroke();
         });
     });
+    
 }
 
 function vaultingHorse(m,n,routes,points,steps)
@@ -322,6 +323,235 @@ function nextStep(m,n,x,y,j,points,steps)
     }
 }
 
+/*姓名编码 */
+function name_draw()
+{   
+    var mx=30;
+    var my=30;
+
+    var canvas = document.getElementById("canv");
+
+    var cxt = canvas.getContext("2d"); 
+        
+    cxt.beginPath();
+    cxt.beginPath();
+    cxt.lineWidth = 2; 
+    for(i=0;i<15;i++)
+    {
+        cxt.moveTo(0,my);
+        cxt.lineTo(480,my);
+        my=my+30
+    }
+    for(j=0;j<15;j++)
+    {
+        cxt.moveTo(mx,0);
+        cxt.lineTo(mx,480);
+        mx=mx+30
+    }               
+    cxt.stroke();
+}
+
+function Point(x,y)
+{
+    this.x=x;
+    this.y=y;
+}
+
+function NDraw()
+{   
+    name_draw();
+    var inputfile = document.getElementById("fileinput").files[0];
+    var reader = new FileReader();
+    reader.readAsText(inputfile);
+    reader.onload=function(e)
+    {   
+        var text=reader.result.split("\r\n");
+   
+        var Lines=new Array();
+        var N=0;
+        Lines[N]=new Array();
+
+        var l=text.length;
+        var judge=0;
+        for(i=1;i<l-1;i++)
+        {   
+            
+            if(text[i]!="END")
+            {   
+                if(text[i].length!=1)
+                {
+                var x;
+                var y;
+                x=text[i].split(",")[0];
+                y=text[i].split(",")[1];
+                Lines[N][judge]=new Point(x,y);
+                judge=judge+1;
+                }
+            }
+            else
+            {
+                judge=0;
+                N=N+1;
+                Lines[N]=new Array();
+            }
+        }
+        var canvas = document.getElementById("canv");
+        var cxt = canvas.getContext("2d");
+        cxt.beginPath();
+        cxt.lineWidth = 10;
+        for(i=0;i<N+1;i++)
+        {   
+            var ll=Lines[i].length;
+            for(j=0;j<ll-1;j++)
+            {
+                 
+                cxt.moveTo((Lines[i][j].x)*30,(Lines[i][j].y)*30);
+                cxt.lineTo((Lines[i][j+1].x)*30,(Lines[i][j+1].y)*30);
+                
+            }
+        }
+        cxt.stroke();
+        
+    }
+
+}
+
+
+/*最佳工作序列*/
+function toRoute(number,route)
+{   
+    route[0]=0;
+    var i;
+    for(i=b;i<Number(number);i++)
+    {   
+        e=e+1;  
+        b=i;    
+        route[e]=b;
+        b=b+1;
+        toRoute(number,route)
+    }
+    var l=route.length;
+    if(route[l-1]==Number(number)-1)
+    {
+        var j;
+        for(j=0;j<l;j++)
+        {
+            routes[N][j]=route[j];
+        }
+        N=N+1;
+        routes[N]=new Array();
+        route.pop();
+        route.pop();
+        e=e-2;
+        b=b-1;
+    }
+}
+
+function toValue()
+{
+    var l=routes.length-1;
+    var rl;
+    var n=0;
+    while(n<l)
+    {   
+        var svalue=0;
+        var stime=0;
+        var sdate=0;
+        
+        rl=routes[n].length;
+        for(j=1;j<rl;j++)
+        {
+            stime=stime+goods[routes[n][j]].time;
+            sdate=goods[routes[n][j]].date;
+            if(sdate>=stime)
+            {
+                svalue=svalue+goods[routes[n][j]].value;
+            }
+            else
+            {
+                svalue=0;
+                break;
+            }
+            
+        }
+        routes[n][0]=svalue;
+        n=n+1;
+    }
+}
+
+function bestSq()
+{   
+    number = document.getElementsByName("p1")[0].value;
+    nid = document.getElementsByName("p2")[0].value;
+    ntime = document.getElementsByName("p3")[0].value;
+    ndate = document.getElementsByName("p4")[0].value;
+    nvalue = document.getElementsByName("p5")[0].value;
+
+    goods=new Array();
+    routes=new Array();
+    route=new Array();
+    N=0;
+    routes[N]=new Array();
+    e=0;
+    b=0;
+   
+    idArray=nid.split(',');
+    timeArray=ntime.split(',');
+    dateArray=ndate.split(',');
+    valueArray=nvalue.split(',');
+    
+    for(i=0;i<Number(number);i++)
+    {
+         goods[i]=
+         {
+             "id":idArray[i],
+             "time":Number(timeArray[i]),
+             "date":Number(dateArray[i]),
+             "value":Number(valueArray[i])
+        };
+    }
+    
+    for(i=0;i<(Number(number)-1);i++)
+    {
+        var min=goods[i];
+        for(j=i+1;j<Number(number);j++)
+        {
+            if(min.date>goods[j].date)
+            {
+                min=goods[j];
+                goods[j]=goods[i];
+                goods[i]=min;
+            }
+        }
+    }
+    
+    toRoute(number,route);
+    toValue();
+    
+    var sl=routes.length;
+    var bestid=0;
+    var best=new Array();
+    var max=routes[0][0];
+    for(i=1;i<sl;i++)
+    {
+        if(max<routes[i][0])
+        {
+            max=routes[i][0];
+            bestid=i;
+        }
+    }
+    var bl=routes[bestid].length;
+    for(j=1;j<bl;j++)
+    {   
+        var q=routes[bestid][j]
+        best[j-1]=goods[q].id;
+    }
+    
+    document.getElementsByName("a1")[0].value=best;
+    document.getElementsByName("a2")[0].value=routes[bestid][0];
+    document.getElementById("output").style.display= "block";
+    
+}
 
 
 
