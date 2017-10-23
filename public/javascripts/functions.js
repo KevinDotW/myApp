@@ -367,8 +367,8 @@ function NDraw()
     {   
         var text=reader.result.split("\r\n");
    
-        var Lines=new Array();
-        var N=0;
+        Lines=new Array();
+        N=0;
         Lines[N]=new Array();
 
         var l=text.length;
@@ -415,6 +415,160 @@ function NDraw()
     }
 
 }
+
+/*姓名变换*/ 
+function X8Draw()
+{
+     var canvas = document.getElementById("canv");
+     var cxt = canvas.getContext("2d");
+     cxt.clearRect(0,0,480,480);
+     name_draw()
+     cxt.beginPath();
+     cxt.lineWidth = 10;
+     for(i=0;i<N+1;i++)
+     {   
+        var ll=Lines[i].length;
+        for(j=0;j<ll-1;j++)
+        {
+                 
+            cxt.moveTo(480-(Lines[i][j].x)*30,(Lines[i][j].y)*30);
+            cxt.lineTo(480-(Lines[i][j+1].x)*30,(Lines[i][j+1].y)*30);
+                
+        }
+    }
+        cxt.stroke();
+}
+
+function Y8Draw()
+{
+     var canvas = document.getElementById("canv");
+     var cxt = canvas.getContext("2d");
+     cxt.clearRect(0,0,480,480);
+     name_draw()
+     cxt.beginPath();
+     cxt.lineWidth = 10;
+     for(i=0;i<N+1;i++)
+     {   
+        var ll=Lines[i].length;
+        for(j=0;j<ll-1;j++)
+        {
+            cxt.moveTo((Lines[i][j].x)*30,480-(Lines[i][j].y)*30);
+            cxt.lineTo((Lines[i][j+1].x)*30,480-(Lines[i][j+1].y)*30);
+                
+        }
+    }
+        cxt.stroke();
+}
+
+function BLDraw()
+{
+     var canvas = document.getElementById("canv");
+     var cxt = canvas.getContext("2d");
+     cxt.clearRect(0,0,480,480);
+     name_draw()
+     cxt.beginPath();
+     cxt.lineWidth = 10;
+     for(i=0;i<N+1;i++)
+     {   
+        var ll=Lines[i].length;
+        for(j=0;j<ll-1;j++)
+        {
+            cxt.moveTo((Lines[i][j].x)*30*0.5,(Lines[i][j].y)*30*0.5);
+            cxt.lineTo((Lines[i][j+1].x)*30*0.5,(Lines[i][j+1].y)*30*0.5);
+                
+        }
+    }
+        cxt.stroke();
+}
+
+function PYDraw()
+{
+    var canvas = document.getElementById("canv");
+     var cxt = canvas.getContext("2d");
+     cxt.clearRect(0,0,480,480);
+     name_draw()
+     cxt.beginPath();
+     cxt.lineWidth = 10;
+     for(i=0;i<N+1;i++)
+     {   
+        var ll=Lines[i].length;
+        for(j=0;j<ll-1;j++)
+        {
+            cxt.moveTo((Lines[i][j].x)*30+60,(Lines[i][j].y)*30);
+            cxt.lineTo((Lines[i][j+1].x)*30+60,(Lines[i][j+1].y)*30);
+                
+        }
+    }
+        cxt.stroke();
+}
+
+function XZDraw()
+{
+    var canvas = document.getElementById("canv");
+     var cxt = canvas.getContext("2d");
+     cxt.clearRect(0,0,480,480);
+     name_draw()
+     cxt.beginPath();
+     cxt.lineWidth = 10;
+     for(i=0;i<N+1;i++)
+     {   
+        var ll=Lines[i].length;
+        for(j=0;j<ll-1;j++)
+        {   
+            a=(Lines[i][j].x)*30-240;
+            b=(Lines[i][j].y)*30-240;
+            a1=(Lines[i][j+1].x)*30-240;
+            b1=(Lines[i][j+1].y)*30-240;
+            cxt.moveTo(a*0.5-b*1.73/2+240,a*1.73/2+b*0.5+240);
+            cxt.lineTo(a1*0.5-b1*1.73/2+240,a1*1.73/2+b1*0.5+240);
+        }
+    }
+        cxt.stroke();
+}
+
+function ZXDraw()
+{
+     var canvas = document.getElementById("canv");
+     var cxt = canvas.getContext("2d");
+     cxt.clearRect(0,0,480,480);
+     name_draw()
+     cxt.beginPath();
+     cxt.lineWidth = 10;
+     for(i=0;i<N+1;i++)
+     {   
+        var ll=Lines[i].length;
+        for(j=0;j<ll-1;j++)
+        {   
+                cxt.moveTo((Lines[i][j].x)*30+(Lines[i][j].y)*0.27*30,(Lines[i][j].y)*30);
+                cxt.lineTo((Lines[i][j+1].x)*30+(Lines[i][j+1].y)*0.27*30,(Lines[i][j+1].y)*30);
+            
+        }
+    }
+        cxt.stroke();
+}
+
+function SJDraw()
+{
+     var canvas = document.getElementById("canv");
+     var cxt = canvas.getContext("2d");
+     cxt.clearRect(0,0,480,480);
+     name_draw()
+     cxt.beginPath();
+     cxt.lineWidth = 10;
+     for(i=0;i<N+1;i++)
+     {   
+        var ll=Lines[i].length;
+        for(j=0;j<ll-1;j++)
+        {   
+                cxt.moveTo((Lines[i][j].x)*30,(Lines[i][j].y)*30-(Lines[i][j].x)*30*0.27);
+                cxt.lineTo((Lines[i][j+1].x)*30,(Lines[i][j+1].y)*30-(Lines[i][j+1].x)*30*0.27);
+            
+        }
+    }
+        cxt.stroke();
+}
+
+
 
 
 /*最佳工作序列*/
