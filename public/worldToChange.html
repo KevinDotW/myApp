@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>worldToChange!</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="stylesheets/style.css" rel="stylesheet">
+        <link href="stylesheets/fonts.css" rel="stylesheet">
+        <script type="text/javascript" src="javascripts/functions.js"></script>
+    </head>
+    <body>
+        <div class="bg">
+
+            <div class="bg-right">
+                <canvas id="canvas" width="720px" height="540px"></canvas>
+            </div>
+
+            <div class="bg-left">
+            <p>请输入坐标文件:</p>
+            <input type="file" id="fileinput">
+            <br>
+            <br>
+            <input type="button" value="WGS84绘制" onclick="WGS84Draw()">
+            <br>
+            <br>
+            <input type="button" value="WGS84大圆航线绘制" onclick="DYlineWgsDraw()">
+            <br>
+            <br>
+            <input type="button" value="墨卡托投影" onclick="WMktDraw()">
+            <br>
+            <br>
+            <input type="button" value="墨卡托投影大圆航线" onclick="DYlineMktDraw()">
+            </div>
+        </div>
+    </body>
+</html>

@@ -707,5 +707,609 @@ function bestSq()
     
 }
 
+/*世界,WGS84*/ 
+function WDTDraw()
+{ 
+    var mx=0;
+    var my=0;
+    var canvas = document.getElementById("canvas");
 
+    var cxt = canvas.getContext("2d"); 
+        
+    cxt.beginPath();
+    cxt.lineWidth = 0.5; 
+    for(i=0;i<=36;i++)
+    {   
+        cxt.moveTo(0,my);
+        cxt.lineTo(720,my);
+        my=my+10
+    }
+    for(j=0;j<=72;j++)
+    {
+        cxt.moveTo(mx,0);
+        cxt.lineTo(mx,360);
+        mx=mx+10
+    }               
+    cxt.stroke();
+}
+
+function WGS84Draw()
+{   
+    WDTDraw();
+    var inputfile = document.getElementById("fileinput").files[0];
+    var reader = new FileReader();
+    reader.readAsText(inputfile);
+    reader.onload=function(e)
+    {   
+        var text=reader.result.split("\r\n");
+   
+        Lines=new Array();
+        N=0;
+        Lines[N]=new Array();
+
+        var l=text.length;
+        var judge=0;
+        for(i=1;i<l-1;i++)
+        {   
+            
+            if(text[i]!="END")
+            {   
+                if(text[i].split(",").length!=1)
+                {
+                var x;
+                var y;
+                x=text[i].split(",")[0];
+                y=text[i].split(",")[1];
+                Lines[N][judge]=new Point(x,y);
+                judge=judge+1;
+                }
+            }
+            else
+            {
+                judge=0;
+                N=N+1;
+                Lines[N]=new Array();
+            }
+        }
+        var canvas = document.getElementById("canvas");
+        var cxt = canvas.getContext("2d");
+        cxt.beginPath();
+        cxt.lineWidth = 0.5;
+        for(i=0;i<N+1;i++)
+        {   
+            var ll=Lines[i].length;
+            for(j=0;j<ll-1;j++)
+            {
+                 
+                cxt.moveTo(Lines[i][j].x/5*10+360,360-(Lines[i][j].y)/5*10-180);
+                cxt.lineTo(Lines[i][j+1].x/5*10+360,360-(Lines[i][j+1].y)/5*10-180);
+            }
+        }
+        cxt.stroke();
+    }
+}
+
+/*中国,BeiJing54*/ 
+function CDTDraw()
+{ 
+    var mx=0;
+    var my=0;
+    var canvas = document.getElementById("canvas");
+
+    var cxt = canvas.getContext("2d"); 
+        
+    cxt.beginPath();
+    cxt.lineWidth = 1; 
+    for(i=0;i<=14;i++)
+    {   
+        cxt.moveTo(0,my);
+        cxt.lineTo(640,my);
+        my=my+40
+    }
+    for(j=0;j<=16;j++)
+    {
+        cxt.moveTo(mx,0);
+        cxt.lineTo(mx,560);
+        mx=mx+40
+    }               
+    cxt.stroke();
+}
+
+function BJ54Draw()
+{   
+    CDTDraw();
+    var inputfile = document.getElementById("fileinput").files[0];
+    var reader = new FileReader();
+    reader.readAsText(inputfile);
+    reader.onload=function(e)
+    {   
+        var text=reader.result.split("\r\n");
+   
+        Lines=new Array();
+        N=0;
+        Lines[N]=new Array();
+
+        var l=text.length;
+        var judge=0;
+        for(i=1;i<l-1;i++)
+        {   
+            
+            if(text[i]!="END")
+            {   
+                if(text[i].split(",").length!=1)
+                {
+                var x;
+                var y;
+                x=text[i].split(",")[0];
+                y=text[i].split(",")[1];
+                Lines[N][judge]=new Point(x,y);
+                judge=judge+1;
+                }
+            }
+            else
+            {
+                judge=0;
+                N=N+1;
+                Lines[N]=new Array();
+            }
+        }
+        var canvas = document.getElementById("canvas");
+        var cxt = canvas.getContext("2d");
+        cxt.beginPath();
+        cxt.lineWidth = 0.5;
+        for(i=0;i<N+1;i++)
+        {   
+            var ll=Lines[i].length;
+            for(j=0;j<ll-1;j++)
+            {
+                 
+                cxt.moveTo(Lines[i][j].x/5*40-520,560-(Lines[i][j].y/5*40+40));
+                cxt.lineTo(Lines[i][j+1].x/5*40-520,560-(Lines[i][j+1].y/5*40+40));
+            }
+        }
+        cxt.stroke();
+    }
+}
+
+/*世界,墨卡托*/ 
+function toMkt(w)
+{
+    var a=6378137;
+    var b=6356752.3142;
+    var f=1/298.257224;
+    var e2=0.00669437999013;
+    var e=Math.pow(e2,1/2);
+    var e12=0.006739496742227;
+    var N=6399698.90178;
+    var K;
+    var X;
+    K=a*a/b/Math.sqrt(1+e12);
+    X=K*Math.log(Math.tan(Math.PI/4+w/2*Math.PI/180)*Math.pow((1-e*Math.sin(w))/(1+e*Math.sin(w)),e/2));
+    return X;
+}
+
+function WMktDTDraw()
+{   
+    var w5=5;
+    var X5=toMkt(5);
+    var mx=0;
+    var my=0;
+    var d=85;
+    var canvas = document.getElementById("canvas");
+    var cxt = canvas.getContext("2d");         
+    cxt.beginPath();
+    cxt.lineWidth = 0.5; 
+    cxt.strokeStyle="black";
+    for(i=0;i<34;i++)
+    {   
+            cxt.moveTo(0,my);
+            cxt.lineTo(576,my);
+            var x1=toMkt(d);
+            var x2=toMkt(d-5);
+            var X=(x1-x2)/X5;
+            d=d-5;
+            my=my+8*X;       
+    }
+    cxt.moveTo(0,my);
+    cxt.lineTo(576,my);
+    
+    for(j=0;j<=72;j++)
+    {
+        cxt.moveTo(mx,0);
+        cxt.lineTo(mx,my);
+        mx=mx+8;
+    }               
+    cxt.stroke();
+}
+
+function WMktDraw()
+{   
+    var inputfile = document.getElementById("fileinput").files[0];
+    var reader = new FileReader();
+    reader.readAsText(inputfile);
+    reader.onload=function(e)
+    {   
+        var text=reader.result.split("\r\n");
+   
+        Lines=new Array();
+        N=0;
+        Lines[N]=new Array();
+
+        var l=text.length;
+        var judge=0;
+        for(i=1;i<l-1;i++)
+        {   
+            
+            if(text[i]!="END")
+            {   
+                if(text[i].split(",").length!=1)
+                {
+                var x;
+                var y;
+                x=text[i].split(",")[0];
+                y=text[i].split(",")[1];
+                Lines[N][judge]=new Point(x,y);
+                judge=judge+1;
+                }
+            }
+            else
+            {
+                judge=0;
+                N=N+1;
+                Lines[N]=new Array();
+            }
+        }
+        var canvas = document.getElementById("canvas");
+        var cxt = canvas.getContext("2d");
+        cxt.clearRect(0,0,720,540);
+        WMktDTDraw();
+        var Y=2*(toMkt(85)/toMkt(5))*8;
+        cxt.beginPath();
+        cxt.lineWidth = 0.5;
+        for(i=0;i<N+1;i++)
+        {   
+            var ll=Lines[i].length;
+            for(j=0;j<ll-1;j++)
+            {   
+                var k1=toMkt(Lines[i][j].y)/toMkt(5);
+                var k2=toMkt(Lines[i][j+1].y)/toMkt(5);
+                cxt.moveTo(Lines[i][j].x/5*8+288,Y-(k1*8+Y/2));
+                cxt.lineTo(Lines[i][j+1].x/5*8+288,Y-(k2*8+Y/2));               
+            }
+        }
+        cxt.stroke();
+    }
+}
+
+/*大圆航线*/
+function DYline(w1,j1,w2,j2)
+{
+   var num=24; //航线间点数
+   var R=6371000;
+   var φ1 = w1/180*Math.PI;
+   var φ2 = w2/180*Math.PI;
+   var λ1 = j1/180*Math.PI;
+   var λ2 = j2/180*Math.PI;
+   var Δφ = (w2-w1)/180*Math.PI;
+   var Δλ = (j2-j1)/180*Math.PI;
+
+   var a = Math.sin(Δφ/2)*Math.sin(Δφ/2)+Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)*Math.sin(Δλ/2);
+   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+   
+   var DYlines=new Array();
+   var n=0;
+   var point=new Point(j1,w1);
+   DYlines[n]=point;
+   n=n+1;
+   for(i=1;i<24;i++)
+   {
+        var aa=Math.sin((1-i/num)*c)/Math.sin(c);
+        var bb=Math.sin(i/num*c)/Math.sin(c);
+        var x=aa*Math.cos(φ1)*Math.cos(λ1)+bb*Math.cos(φ2)*Math.cos(λ2);
+        var y=aa*Math.cos(φ1)*Math.sin(λ1)+bb*Math.cos(φ2)*Math.sin(λ2);
+        var z=aa*Math.sin(φ1)+bb*Math.sin(φ2)
+        var ww=Math.atan2(z,Math.pow(x*x+y*y,1/2))*180/Math.PI;
+        var jj=Math.atan2(y,x)*180/Math.PI;
+        var point=new Point(jj,ww);
+        DYlines[n]=point;
+        n=n+1;
+   } 
+   var point=new Point(j2,w2);
+   DYlines[n]=point; 
+   return DYlines;
+}
+
+/*大圆航线墨卡托*/
+function DYlineMktDraw()
+{    
+     
+     var DYlines=new Array();
+     DYlines=DYline(39.915076,116.403898,48.863917,2.333983);
+     var len=DYlines.length;
+
+        var canvas = document.getElementById("canvas");
+        var cxt = canvas.getContext("2d");
+        var Y=2*(toMkt(85)/toMkt(5))*8;
+        cxt.beginPath();
+        cxt.lineWidth = 2;
+        cxt.strokeStyle="red";
+        for(i=0;i<len-1;i++)
+        {          
+            var k1=toMkt(DYlines[i].y)/toMkt(5);
+            var k2=toMkt(DYlines[i+1].y)/toMkt(5);
+            cxt.moveTo(DYlines[i].x/5*8+288,Y-(k1*8+Y/2));
+            cxt.lineTo(DYlines[i+1].x/5*8+288,Y-(k2*8+Y/2));               
+        }
+        cxt.stroke();
+}
+
+/*大圆航线WGS84*/
+function DYlineWgsDraw()
+{    
+     
+     var DYlines=new Array();
+     DYlines=DYline(39.915076,116.403898,48.863917,2.333983);
+     var len=DYlines.length;
+
+        var canvas = document.getElementById("canvas");
+        var cxt = canvas.getContext("2d");
+        cxt.beginPath();
+        cxt.lineWidth = 2;
+        cxt.strokeStyle="red";
+        for(i=0;i<len-1;i++)
+        {          
+            cxt.moveTo(DYlines[i].x/5*10+360,360-(DYlines[i].y)/5*10-180);
+            cxt.lineTo(DYlines[i+1].x/5*10+360,360-(DYlines[i+1].y)/5*10-180);            
+        }
+        cxt.stroke();
+}
+
+/*北京54墨卡托*/
+function CMktDTDraw()
+{   
+    var w5=5;
+    var X5=toMkt(5);
+    var mx=0;
+    var my=0;
+    var d=65;
+    var canvas = document.getElementById("canvas");
+    var cxt = canvas.getContext("2d");         
+    cxt.beginPath();
+    cxt.lineWidth = 0.5; 
+    cxt.strokeStyle="black";
+    for(i=0;i<14;i++)
+    {   
+            cxt.moveTo(0,my);
+            cxt.lineTo(350,my);
+            var x1=toMkt(d);
+            var x2=toMkt(d-5);
+            var X=(x1-x2)/X5;
+            d=d-5;
+            my=my+25*X;       
+    }
+    cxt.moveTo(0,my);
+    cxt.lineTo(350,my);
+    
+    for(j=0;j<=14;j++)
+    {
+        cxt.moveTo(mx,0);
+        cxt.lineTo(mx,my);
+        mx=mx+25;
+    }               
+    cxt.stroke();
+}
+
+function CMktDraw()
+{   
+    var inputfile = document.getElementById("fileinput").files[0];
+    var reader = new FileReader();
+    reader.readAsText(inputfile);
+    reader.onload=function(e)
+    {   
+        var text=reader.result.split("\r\n");
+   
+        Lines=new Array();
+        N=0;
+        Lines[N]=new Array();
+
+        var l=text.length;
+        var judge=0;
+        for(i=1;i<l-1;i++)
+        {   
+            
+            if(text[i]!="END")
+            {   
+                if(text[i].split(",").length!=1)
+                {
+                var x;
+                var y;
+                x=text[i].split(",")[0];
+                y=text[i].split(",")[1];
+                Lines[N][judge]=new Point(x,y);
+                judge=judge+1;
+                }
+            }
+            else
+            {
+                judge=0;
+                N=N+1;
+                Lines[N]=new Array();
+            }
+        }
+        var canvas = document.getElementById("canvas");
+        var cxt = canvas.getContext("2d");
+        cxt.clearRect(0,0,720,560);
+        CMktDTDraw();
+        var Y=toMkt(65)/toMkt(5)*25+25;
+        cxt.beginPath();
+        cxt.lineWidth = 0.5;
+        for(i=0;i<N+1;i++)
+        {   
+            var ll=Lines[i].length;
+            for(j=0;j<ll-1;j++)
+            {   
+                var k1=toMkt(Lines[i][j].y)/toMkt(5);
+                var k2=toMkt(Lines[i][j+1].y)/toMkt(5);
+                cxt.moveTo(Lines[i][j].x/5*25-325,Y-(k1*25+25));
+                cxt.lineTo(Lines[i][j+1].x/5*25-325,Y-(k2*25+25));               
+            }
+        }
+        cxt.stroke();
+    }
+}
+
+/*兰伯特投影*/
+function toLbt(L,B)
+{   
+    var a=6378245;
+    var e2=0.006693421622966;
+    var e = Math.sqrt(e2);
+
+    L = L * Math.PI / 180;
+    B = B * Math.PI / 180;
+
+    var b1 = 20 * Math.PI / 180; 
+    var b2 = 40 * Math.PI / 180; 
+    var l0 = 105 * Math.PI / 180; 
+    var b0 = 0;  
+
+    var m = Math.cos(B)/Math.sqrt(1-e2*Math.sin(B)*Math.sin(B));
+    var mb1 = Math.cos(b1) / Math.sqrt(1 - e2 * Math.sin(b1) * Math.sin(b1));
+    var mb2 = Math.cos(b2) / Math.sqrt(1 - e2 * Math.sin(b2) * Math.sin(b2));
+
+    var t = Math.tan(Math.PI / 4 - B / 2) / Math.pow(((1 - e * Math.sin(B)) / (1 + e * Math.sin(B))), e / 2);
+    var t0 = Math.tan(Math.PI / 4 - b0 / 2) / Math.pow((1 - e * Math.sin(b0)) / (1 + e * Math.sin(b0)), e / 2);
+    var tb1 = Math.tan(Math.PI / 4 - b1 / 2) / Math.pow(((1 - e * Math.sin(b1)) / (1 + e * Math.sin(b1))), e / 2);
+    var tb2 = Math.tan(Math.PI / 4 - b2 / 2) / Math.pow(((1 - e * Math.sin(b2)) / (1 + e * Math.sin(b2))), e / 2);
+
+    var n = Math.log(mb1 / mb2) / Math.log(tb1 / tb2);
+    var F = mb1 / (n * Math.pow(tb1, n));
+
+    var r = a * F * Math.pow(t, n);
+    var r0 = a * F * Math.pow(t0, n);
+   
+    var theta = n * (L - l0);
+
+    var X = r0 - r * Math.cos(theta);
+    var Y = r * Math.sin(theta);
+
+    var point=new Point(Y,X);
+    return point;
+}
+
+function CLbtDTDraw()
+{   
+    var canvas = document.getElementById("canvas");
+    var cxt = canvas.getContext("2d");         
+    cxt.beginPath();
+    cxt.lineWidth = 0.5; 
+    cxt.strokeStyle="black";
+    
+    var DTlines=new Array();
+    var nx=15;
+    var ny=15;
+    var bw=65;
+    var bj=70;
+    for(i=0;i<nx;i++)
+    {   
+        DTlines[i]=new Array();
+        for(j=0;j<ny;j++)
+        {
+            var point=toLbt(bj,bw);
+            DTlines[i][j]=point;
+            bw=bw-5;
+        }
+        bw=65;
+        bj=bj+5;
+    }
+    for(i=0;i<nx;i++)
+    {      
+       for(j=0;j<ny-1;j++) 
+       {
+            var x1=(DTlines[i][j].x-13700000)/30000;
+            var y1=(DTlines[i][j].y/10000)/70000*20000;
+            var x2=(DTlines[i][j+1].x-13700000)/30000;
+            var y2=(DTlines[i][j+1].y/10000)/70000*20000;  
+            cxt.moveTo( x1+680, 260-y1);
+            cxt.lineTo( x2+680, 260-y2);
+       }
+    }
+    for(i=0;i<ny;i++)
+    {      
+       for(j=0;j<nx-1;j++) 
+       {
+            var x1=(DTlines[j][i].x-13700000)/30000;
+            var y1=(DTlines[j][i].y/10000)/70000*20000;
+            var x2=(DTlines[j+1][i].x-13700000)/30000;
+            var y2=(DTlines[j+1][i].y/10000)/70000*20000;  
+            cxt.moveTo( x1+680, 260-y1);
+            cxt.lineTo( x2+680, 260-y2);
+       }
+    }      
+    cxt.stroke();
+}
+
+function CLbtDraw()
+{  
+    var inputfile = document.getElementById("fileinput").files[0];
+    var reader = new FileReader();
+    reader.readAsText(inputfile);
+    reader.onload=function(e)
+    {   
+        var text=reader.result.split("\r\n");
+   
+        Lines=new Array();
+        N=0;
+        Lines[N]=new Array();
+
+        var l=text.length;
+        var judge=0;
+        for(i=1;i<l-1;i++)
+        {   
+            
+            if(text[i]!="END")
+            {   
+                if(text[i].split(",").length!=1)
+                {
+                var x;
+                var y;
+                x=text[i].split(",")[0];
+                y=text[i].split(",")[1];
+                Lines[N][judge]=new Point(x,y);
+                judge=judge+1;
+                }
+            }
+            else
+            {
+                judge=0;
+                N=N+1;
+                Lines[N]=new Array();
+            }
+        }
+        var canvas = document.getElementById("canvas");
+        var cxt = canvas.getContext("2d");
+       cxt.clearRect(0,0,720,560);
+        CLbtDTDraw()
+        /*var Y=toMkt(65)/toMkt(5)*25+25;*/
+        cxt.beginPath();
+        cxt.lineWidth = 0.5;
+        for(i=0;i<N+1;i++)
+        {   
+            var ll=Lines[i].length;
+            for(j=0;j<ll-1;j++)
+            {   
+                var point1=toLbt(Lines[i][j].x,Lines[i][j].y);
+                var point2=toLbt(Lines[i][j+1].x,Lines[i][j+1].y);
+
+                var x1=(point1.x-13700000)/30000;
+                var y1=(point1.y/10000)/70000*20000;
+                var x2=(point2.x-13700000)/30000;
+                var y2=(point2.y/10000)/70000*20000;
+                cxt.moveTo(x1+680,260-y1);
+                cxt.lineTo(x2+680,260-y2);               
+            }
+        }
+        cxt.stroke();
+    }
+}
 
