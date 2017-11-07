@@ -1161,7 +1161,7 @@ function CMktDraw()
 /*兰伯特投影*/
 function toLbt(L,B)
 {   
-    var a=6378245;
+    var a=6378137;
     var e2=0.006693421622966;
     var e = Math.sqrt(e2);
 
@@ -1313,3 +1313,359 @@ function CLbtDraw()
     }
 }
 
+/*求江苏省各市面积(墨卡托)*/
+function MktTo(Y,X)
+{
+    var a=6378137;
+    var b=6356752.3142;
+    var e2=0.006693421622966;
+    var e12=0.006739496742227;
+    var e = Math.sqrt(e2);
+
+    var B0=0;
+    var L0=0;
+    var k=a*a/b*Math.cos(B0)/Math.sqrt(1+e12*Math.cos(B0)*Math.cos(B0));
+
+    var B,L,B1;
+    var B=0;
+
+    L=Y/k+L0;
+
+    for(var j=0;;j++)
+    {
+        B1=Math.PI/2-2*Math.atan( Math.exp(-X/k) * Math.exp( e/2 * Math.log( (1-Math.sin(B)) / (1+Math.sin(B)) ) ) );
+        B=B1;
+        if(Math.abs((B1-B))<0.000001)
+        {
+            break;
+        }
+    }
+
+    L=L*180/Math.PI;
+    B=B*180/Math.PI;
+    
+    var point=new Point(L,B);
+    return point;
+}
+
+function toMPolygonArea(polygon)  
+{  
+    var i, j;  
+    var area = 0;  
+    for (i = 0; i < polygon.length; i++)  
+    {  
+        j = (i + 1) % polygon.length;  
+        area += polygon[i].x * polygon[j].y;  
+        area -= polygon[i].y * polygon[j].x;  
+    }  
+    area /= 2;  
+    return Math.abs(area);  
+}
+
+function toPolygonArea(polygon)
+{
+    var a=6378245;
+    var i, j;  
+    var area = 0;     
+    for (i = 0; i < polygon.length; i++)  
+    {   
+        j = (i + 1) % polygon.length; 
+        var x1=polygon[i].x/180*Math.PI*a*Math.cos(polygon[i].y/180*Math.PI);
+        var y1=polygon[i].y/180*Math.PI*a;
+        var x2=polygon[j].x/180*Math.PI*a*Math.cos(polygon[j].y/180*Math.PI);
+        var y2=polygon[j].y/180*Math.PI*a;
+        area += x1 * y2;  
+        area -= y1 * x2;  
+    }  
+    area /= 2;  
+    return Math.abs(area);  
+}
+
+function toMSumArea(polygons)
+{
+    var l=polygons.length;
+    var sumArea=new Array();
+    var n=0;
+    for(i=0;i<l;i++)
+    {   
+        var eArea;
+        var s=0;
+        switch(i)
+        {
+            case 1:s=s+toMPolygonArea(polygons[i]);break;
+            case 2:s=s+toMPolygonArea(polygons[i]);break;
+            case 3:s=s+toMPolygonArea(polygons[i]);break;
+            case 4:s=s+toMPolygonArea(polygons[i]);break;
+            case 5:s=s+toMPolygonArea(polygons[i]);break;
+            case 6:eArea=toMPolygonArea(polygons[i])-s;sumArea[n]=eArea;n=n+1;break;
+            default:eArea=toMPolygonArea(polygons[i]);sumArea[n]=eArea;n=n+1;break;
+        }
+    }
+    return sumArea;
+}
+
+function toSumArea(polygons)
+{
+    var l=polygons.length;
+    var sumArea=new Array();
+    var n=0;
+    for(i=0;i<l;i++)
+    {   
+        var eArea;
+        var s=0;
+        switch(i)
+        {
+            case 1:s=s+toPolygonArea(polygons[i]);break;
+            case 2:s=s+toPolygonArea(polygons[i]);break;
+            case 3:s=s+toPolygonArea(polygons[i]);break;
+            case 4:s=s+toPolygonArea(polygons[i]);break;
+            case 5:s=s+toPolygonArea(polygons[i]);break;
+            case 6:eArea=toPolygonArea(polygons[i])-s;sumArea[n]=eArea;n=n+1;break;
+            default:eArea=toPolygonArea(polygons[i]);sumArea[n]=eArea;n=n+1;break;
+        }
+    }
+    return sumArea;
+}
+
+function drawMDTArea()
+{
+    var w5=5;
+    var X5=toMkt(5);
+    var mx=0;
+    var my=0;
+    var d=40;
+    var canvas = document.getElementById("canvas");
+    var cxt = canvas.getContext("2d");         
+    cxt.beginPath();
+    cxt.lineWidth = 0.5; 
+    cxt.strokeStyle="black";
+    for(i=0;i<3;i++)
+    {   
+            cxt.moveTo(0,my);
+            cxt.lineTo(480,my);
+            var x1=toMkt(d);
+            var x2=toMkt(d-5);
+            var X=(x1-x2)/X5;
+            d=d-5;
+            my=my+160*X;       
+    }
+    cxt.moveTo(0,my);
+    cxt.lineTo(480,my);
+    
+    for(j=0;j<=3;j++)
+    {
+        cxt.moveTo(mx,0);
+        cxt.lineTo(mx,my);
+        mx=mx+160;
+    }               
+    cxt.stroke();
+}
+
+function drawDTArea()
+{
+    var mx=0;
+    var my=0;
+    var canvas = document.getElementById("canvas");
+    var cxt = canvas.getContext("2d");         
+    cxt.beginPath();
+    cxt.lineWidth = 0.5; 
+    cxt.strokeStyle="black";
+    for(i=0;i<3;i++)
+    {   
+            cxt.moveTo(0,my);
+            cxt.lineTo(480,my);
+            my=my+160;       
+    }
+    cxt.moveTo(0,my);
+    cxt.lineTo(480,my);
+    
+    for(j=0;j<=3;j++)
+    {
+        cxt.moveTo(mx,0);
+        cxt.lineTo(mx,my);
+        mx=mx+160;
+    }               
+    cxt.stroke();
+}
+
+function drawMArea()
+{   
+    var inputfile = document.getElementById("fileinput").files[0];
+    var reader = new FileReader();
+    reader.readAsText(inputfile);
+    reader.onload=function(e)
+    {   
+        var text=reader.result.split("\r\n");
+   
+        Lines=new Array();
+        N=0;
+        Lines[N]=new Array();
+
+        var l=text.length;
+        var judge=0;
+        for(i=1;i<l-1;i++)
+        {   
+            
+            if(text[i]!="END")
+            {   
+                if(text[i].split(",").length!=1)
+                {
+                var x;
+                var y;
+                x=text[i].split(",")[0];
+                y=text[i].split(",")[1];
+                Lines[N][judge]=new Point(x,y);
+                judge=judge+1;
+                }
+            }
+            else
+            {
+                judge=0;
+                N=N+1;
+                Lines[N]=new Array();
+            }
+        }
+        Lines.pop();
+        Lines.pop();
+
+        sumArea=new Array();
+        sumArea=toMSumArea(Lines);
+
+        var point;
+
+        var canvas = document.getElementById("canvas");
+        var cxt = canvas.getContext("2d");
+        cxt.clearRect(0,0,720,560);
+        drawMDTArea()
+        var Y=560;
+        cxt.beginPath();
+        cxt.lineWidth = 0.5;
+        for(i=0;i<N-1;i++)
+        {   
+            var ll=Lines[i].length;
+            for(j=0;j<ll-1;j++)
+            {   
+                var x1=Lines[i][j].x/1200-10800;
+                var x2=Lines[i][j+1].x/1200-10800;
+                var y1=560-(Lines[i][j].y/1200-2950);
+                var y2=560-(Lines[i][j+1].y/1200-2950)
+                cxt.moveTo(x1,y1);
+                cxt.lineTo(x2,y2);               
+            }
+        }
+        cxt.stroke();
+    }
+} 
+
+function drawArea()
+{   
+    var inputfile = document.getElementById("fileinput").files[0];
+    var reader = new FileReader();
+    reader.readAsText(inputfile);
+    reader.onload=function(e)
+    {   
+        var text=reader.result.split("\r\n");
+   
+        Lines=new Array();
+        N=0;
+        Lines[N]=new Array();
+
+        var l=text.length;
+        var judge=0;
+        for(i=1;i<l-1;i++)
+        {   
+            
+            if(text[i]!="END")
+            {   
+                if(text[i].split(",").length!=1)
+                {
+                var x;
+                var y;
+                x=text[i].split(",")[0];
+                y=text[i].split(",")[1];
+
+                var p=MktTo(x,y);
+                x=p.x;
+                y=p.y;
+
+                Lines[N][judge]=new Point(x,y);
+                judge=judge+1;
+                }
+            }
+            else
+            {
+                judge=0;
+                N=N+1;
+                Lines[N]=new Array();
+            }
+        }
+        Lines.pop();
+        Lines.pop();
+
+        sumArea=new Array();
+        sumArea=toSumArea(Lines);
+
+        var point;
+        
+        var canvas = document.getElementById("canvas");
+        var cxt = canvas.getContext("2d");
+        cxt.clearRect(0,0,720,560);
+        drawDTArea()
+        var Y=560;
+        cxt.beginPath();
+        cxt.lineWidth = 0.5;
+        for(i=0;i<N-1;i++)
+        {   
+            var ll=Lines[i].length;
+            for(j=0;j<ll-1;j++)
+            {   
+                var x1=(Lines[i][j].x/5-23)*240;
+                var x2=(Lines[i][j+1].x/5-23)*240;
+                var y1=560-(Lines[i][j].y/5*240-1280);
+                var y2=560-(Lines[i][j+1].y/5*240-1280)
+                cxt.moveTo(x1,y1);
+                cxt.lineTo(x2,y2);               
+            }
+        }
+        cxt.stroke();
+    }
+} 
+
+function getMArea()
+{
+    var n=Number(document.getElementById("area1").value);
+    document.getElementById("result1").innerHTML="面积:"+sumArea[n];
+    document.getElementById("result1").style.display="block";
+    document.getElementById("result2").style.display="none";
+}
+
+function getArea()
+{
+    var n=Number(document.getElementById("area2").value);
+    document.getElementById("result2").innerHTML="面积:"+sumArea[n];
+    document.getElementById("result1").style.display="none";
+    document.getElementById("result2").style.display="block";
+}
+
+
+/*地图压缩*/
+function toLine(x1,y1,x2,y2)
+{
+   var A,B,C;
+   A=(y1-y2)/Math.sqrt(Math.pow(y1-y2,2)+Math.pow(x1-x2,2));
+   B=(x2-x1)/Math.sqrt(Math.pow(y1-y2,2)+Math.pow(x1-x2,2));
+   C=(x1*y2-x2*y1)/Math.sqrt(Math.pow(y1-y2,2)+Math.pow(x1-x2,2));
+   return [A,B,C];
+}
+
+function toDistance(x1,y1,A,B,C)
+{
+    var distance;
+    distance=Math.abs(A*x1+B*y1+C);
+    return distance;
+}
+
+function mapCompression()
+{
+
+}

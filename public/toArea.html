@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Hello,area!</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="stylesheets/style.css" rel="stylesheet">
+        <link href="stylesheets/fonts.css" rel="stylesheet">
+        <script type="text/javascript" src="javascripts/functions.js"></script>
+    </head>
+    <body>
+        <div class="bg">
+
+            <div class="bg-right">
+                <canvas id="canvas" width="720px" height="560px"></canvas>
+            </div>
+
+            <div class="bg-left">
+            <p>请输入坐标文件:</p>
+            <input type="file" id="fileinput">
+            <br>
+            <br>
+            <input type="button" value="绘制江苏省(墨卡托)" onclick="drawMArea()">
+            <select id="area1">
+            <option value="0">连云港市</option>
+            <option value="1">徐州市</option> 
+            <option value="2">宿迁市</option>
+            <option value="3">盐城市</option>
+            <option value="4">淮安市</option>
+            <option value="5">泰州市</option>
+            <option value="6">南通市</option>
+            <option value="7">扬州市</option>
+            <option value="8">南京市</option>
+            <option value="9">镇江市</option>
+            <option value="10">常州市</option>
+            <option value="11">无锡市</option>
+            <option value="12">苏州市</option>
+            </select>
+            <input type="button" value="计算面积" onclick="getMArea()">
+            <p id="result1"></p>
+            <br>
+            <br>
+            <br>
+            <br>
+            <input type="button" value="绘制江苏省(经纬度)" onclick="drawArea()">
+            <select id="area2">
+            <option value="0">连云港市</option>
+            <option value="1">徐州市</option> 
+            <option value="2">宿迁市</option>
+            <option value="3">盐城市</option>
+            <option value="4">淮安市</option>
+            <option value="5">泰州市</option>
+            <option value="6">南通市</option>
+            <option value="7">扬州市</option>
+            <option value="8">南京市</option>
+            <option value="9">镇江市</option>
+            <option value="10">常州市</option>
+            <option value="11">无锡市</option>
+            <option value="12">苏州市</option>
+            </select>
+            <input type="button" value="计算面积" onclick="getArea()">
+            <p id="result2"></p>
+            </div>
+        </div>
+    </body>
+</html>
