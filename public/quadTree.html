@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>vaultingHorse!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="stylesheets/fonts.css" rel="stylesheet">
+    <script type="text/javascript" src="javascripts/functions.js"></script>
+    <script type="text/javascript" src="javascripts/jquery.js"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(179, 168, 150, 0.5);
+        }
+        
+        .board-left {
+            position: relative;
+            width: 35%;
+            height: 100%;
+            display: inline-block;
+            vertical-align: top;
+        }
+        
+        .board-right {
+            left: 10%;
+            position: relative;
+            width: 60%;
+            height: 100%;
+            display: inline-block;
+        }
+        
+        #canv {
+            position: relative;
+            border: 2px solid black;
+            margin: auto;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="board-left">
+
+        <table border="2" style="width:300px">
+            <tr>
+                <th>行数M</th>
+                <th>列数N</th>
+            </tr>
+            <tr>
+                <td><input type="number" max="7" min="0" id="inputm" value="3"></td>
+                <td><input type="number" max="7" min="0" id="inputn" value="3"></td>
+            </tr>
+            <tr>
+                <th colspan="8"><button type="submit" onclick="toMorton()" id="btn">Morton码计算</button></th>
+            </tr>
+            <tr>
+                <th colspan="8">
+                    <p>计算结果</p>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="8">
+                    <ul id="result">
+
+                    </ul>
+                </th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="board-right">
+        <table border="2" style="width:300px">
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>2</td>
+                <td>2</td>
+                <td>3</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>2</td>
+                <td>2</td>
+                <td>3</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>4</td>
+                <td>4</td>
+                <td>5</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>4</td>
+                <td>4</td>
+                <td>5</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>6</td>
+                <td>7</td>
+                <td>8</td>
+                <td>13</td>
+                <td>13</td>
+                <td>14</td>
+                <td>14</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>6</td>
+                <td>9</td>
+                <td>10</td>
+                <td>13</td>
+                <td>13</td>
+                <td>14</td>
+                <td>14</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>11</td>
+                <td>12</td>
+                <td>12</td>
+                <td>15</td>
+                <td>16</td>
+                <td>19</td>
+                <td>19</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>11</td>
+                <td>12</td>
+                <td>12</td>
+                <td>17</td>
+                <td>18</td>
+                <td>19</td>
+                <td>19</td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
