@@ -1684,16 +1684,16 @@ function Douglas_Peucker() {
 
 /*四叉树*/
 function Morton(code, deep, value) {
-  var code = this.code;
-  var deep = this.deep;
-  var value = this.value;
+  this.code=code;
+  this.deep=deep;
+  this.value=value;
 }
 
 function toCut(bm, em, bn, en) {
   var i, j;
   var judge = Mortons[bm][bn];
-  for (i = bm; i <= em; i++) {
-    for (j = bn; i <= en; j++) {
+  for (i = bm; i < em; i++) {
+    for (j = bn; j < en; j++) {
       if (Mortons[i][j] != judge) {
         return false;
       }
@@ -1704,8 +1704,8 @@ function toCut(bm, em, bn, en) {
 
 function toMortonValue(bm, em, bn, en, c, d, v) {
   var i, j;
-  for (i = bm; i <= em; i++) {
-    for (j = bn; i <= en; j++) {
+  for (i = bm; i <em; i++) {
+    for (j = bn; j <en; j++) {
       var m = new Morton(c, d, v);
       Mortons[i][j] = m;
     }
@@ -1723,21 +1723,29 @@ function toMorton() {
                  [11,11,12,12,17,18,19,19],
                 ]
   N = 0;
-
   row = 0;
   col = 0;
   Trow=0;
   Tcol=0;
+  var Ndeep=0;
+  MortonResult(0, 8, 0, 8,Ndeep);
 
-  MortonResult(0, 7, 0, 7);
+  var m=document.getElementById("inputm").value;
+  var n=document.getElementById("inputn").value;
+  m=Number(m);
+  n=Number(n);
+  document.getElementById("result").innerText="Morton:"+Mortons[m][n].code+" 深度:"+Mortons[m][n].deep+" 值:"+Mortons[m][n].value;
+
 
 }
 
-function MortonResult(bm, em, bn, en) {
+function MortonResult(bm, em, bn, en,Ndeep) {
+  var deep=Ndeep+1;
   var i, j;
-  var Ci = (em - bm + 1) / 2;
-  var Cj = (en - bn + 1) / 2;
-  var deep = 0; //记录深度
+  var Ci = (em - bm ) / 2;
+  var Cj = (en - bn ) / 2;
+  var bbm,eem,bbn,een;
+  bbm=bm;bbn=bn;eem=bbm+Ci;een=bbn+Cj;
 
   if (Ci >= 1 && Cj >= 1) 
   { 
@@ -1748,65 +1756,73 @@ function MortonResult(bm, em, bn, en) {
         var code, value, mor;
         if (i == 0 && j == 0) 
         {
-          if (toCut(Ci * i, Ci * i + Ci, Cj * j, Cj * j + Cj)) 
-          {
-            code = Number(Trow.toSting(2)) * 2 + Number(Tcol.toSting(2));
-            value = Mortons[bm, bn];
-            toMortonValue(bm, em, bn, en, code, deep, value);
+          if (toCut(bbm, eem , bbn, een)) 
+          { 
+            Tcol=bbn/(8/Math.pow(2,deep));
+            Trow=bbm/(8/Math.pow(2,deep));
+            code = Number(Trow.toString(2)) * 2 + Number(Tcol.toString(2));
+            value = Mortons[bbm][bbn];
+            toMortonValue(bbm, eem , bbn, een, code, deep, value)
           } 
-          else 
-          {
-            deep = deep + 1;
-            row=row+1;
-            col=col+1;
-            MortonResult(Ci * i, Ci * i + Ci, Cj * j, Cj * j + Cj);
+          else{
+            MortonResult(bbm, eem , bbn, een,deep);
           }
+           bbn=bbn+(8/Math.pow(2,deep));
+           een=een+(8/Math.pow(2,deep));
         }
         else if (i == 0 && j == 1) 
         {
-           Tcol=Tcol+1;
-           if (toCut(Ci * i, Ci * i + Ci, Cj * j, Cj * j + Cj)) 
+           if (toCut(bbm, eem , bbn, een)) 
            {
-            code = Number(Trow.toSting(2)) * 2 + Number(Tcol.toSting(2));
-            value = Mortons[bm, bn];
-            toMortonValue(bm, em, bn, en, code, deep, value);
+            Tcol=bbn/(8/Math.pow(2,deep));
+            Trow=bbm/(8/Math.pow(2,deep));
+            code = Number(Trow.toString(2)) * 2 + Number(Tcol.toString(2));
+            value = Mortons[bbm][bbn];
+            toMortonValue(bbm, eem , bbn, een, code, deep, value);
            } 
            else 
            {
-            deep = deep + 1;
-            col=col+1;
-            MortonResult(Ci * i, Ci * i + Ci, Cj * j, Cj * j + Cj);
+            MortonResult(bbm, eem , bbn, een,deep);
            }
-           Trow=Trow+1;
+
+           bbn=bbn-(8/Math.pow(2,deep));
+           een=een-(8/Math.pow(2,deep));
+
+           bbm=bbm+(8/Math.pow(2,deep));
+           eem=eem+(8/Math.pow(2,deep));
+
         } 
         else if (i == 1 && j == 0) 
         {
-          Tcol=Tcol+1;
-           if (toCut(Ci * i, Ci * i + Ci, Cj * j, Cj * j + Cj)) 
+           if (toCut(bbm, eem , bbn, een)) 
            {
-            code = Number(Trow.toSting(2)) * 2 + Number(Tcol.toSting(2));
-            value = Mortons[bm, bn];
-            toMortonValue(bm, em, bn, en, code, deep, value);
+             Tcol=bbn/(8/Math.pow(2,deep));
+            Trow=bbm/(8/Math.pow(2,deep));
+            code = Number(Trow.toString(2)) * 2 + Number(Tcol.toString(2));
+            value = Mortons[bbm][bbn];
+            toMortonValue(bbm, eem , bbn, een, code, deep, value);
            } 
            else 
            {
-            deep = deep + 1;
-            row=row+1;
-            MortonResult(Ci * i, Ci * i + Ci, Cj * j, Cj * j + Cj);
+            MortonResult(bbm, eem , bbn, een,deep);
            }
+
+           bbn=bbn+(8/Math.pow(2,deep));
+           een=een+(8/Math.pow(2,deep));
         } 
         else if (i == 1 && j == 1) 
         {
-           if (toCut(Ci * i, Ci * i + Ci, Cj * j, Cj * j + Cj)) 
+           if (toCut(bbm, eem , bbn, een)) 
            {
-            code = Number(Trow.toSting(2)) * 2 + Number(Tcol.toSting(2));
-            value = Mortons[bm, bn];
-            toMortonValue(bm, em, bn, en, code, deep, value);
+            Tcol=bbn/(8/Math.pow(2,deep));
+            Trow=bbm/(8/Math.pow(2,deep));
+            code = Number(Trow.toString(2)) * 2 + Number(Tcol.toString(2));
+            value = Mortons[bbm][bbn];
+            toMortonValue(bbm, eem , bbn, een, code, deep, value);
            } 
            else 
            {
-            deep = deep + 1;
-            MortonResult(Ci * i, Ci * i + Ci, Cj * j, Cj * j + Cj);
+            MortonResult(bbm, eem , bbn, een,deep);
            }
         }
       }

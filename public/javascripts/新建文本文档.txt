@@ -1,0 +1,14 @@
+﻿ <input type="file" id="fileinput">
+
+
+
+function CLbtDraw() {
+  var inputfile = document.getElementById("fileinput").files[0];
+  var reader = new FileReader();
+  reader.readAsText(inputfile);
+  reader.onload = function(e) {
+    var text = reader.result.split("\r\n");
+
+    Lines = new Array();
+    N = 0;
+    Lines[N] = new Array();
